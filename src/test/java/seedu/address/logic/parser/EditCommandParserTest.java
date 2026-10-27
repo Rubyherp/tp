@@ -97,6 +97,12 @@ public class EditCommandParserTest {
         assertParseFailure(parser, "2147483648" + NAME_DESC_AMY,
                 Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
 
+        // malformed index
+        assertParseFailure(parser, "abc" + NAME_DESC_AMY,
+                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertParseFailure(parser, "1.5" + NAME_DESC_AMY,
+                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+
         // invalid arguments being parsed as preamble
         assertParseFailure(parser, "1 some random string", MESSAGE_INVALID_FORMAT);
 

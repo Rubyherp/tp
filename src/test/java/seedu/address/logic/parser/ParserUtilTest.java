@@ -11,6 +11,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.logic.Messages;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Area;
@@ -64,6 +65,19 @@ public class ParserUtilTest {
 
         // Leading and trailing whitespaces
         assertEquals(INDEX_FIRST_PERSON, ParserUtil.parseIndex("  1  "));
+    }
+
+    @Test
+    public void parseDisplayedIndex_invalidInput_throwsConsistentParseException() {
+        for (String input : List.of("0", "-1", "abc", "1.5", "2147483648")) {
+            assertThrows(ParseException.class, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, () ->
+                    ParserUtil.parseDisplayedIndex(input));
+        }
+    }
+
+    @Test
+    public void parseDisplayedIndex_validInput_success() throws Exception {
+        assertEquals(INDEX_FIRST_PERSON, ParserUtil.parseDisplayedIndex("1"));
     }
 
     @Test

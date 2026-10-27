@@ -18,24 +18,13 @@ public class RoleCommandParser implements Parser<RoleCommand> {
         String trimmedArgs = args.trim();
         String[] arguments = trimmedArgs.isEmpty() ? new String[0] : trimmedArgs.split("\\s+");
 
-        if (arguments.length == 1) {
-            try {
-                ParserUtil.parseIndex(arguments[0]);
-            } catch (ParseException pe) {
-                throw new ParseException(RoleCommand.MESSAGE_INVALID_COMMAND_FORMAT, pe);
-            }
-            throw new ParseException(ClientRole.MESSAGE_CONSTRAINTS);
-        }
-
-        if (arguments.length != 2) {
+        if (arguments.length == 0 || arguments.length > 2) {
             throw new ParseException(RoleCommand.MESSAGE_INVALID_COMMAND_FORMAT);
         }
 
-        Index index;
-        try {
-            index = ParserUtil.parseIndex(arguments[0]);
-        } catch (ParseException pe) {
-            throw new ParseException(RoleCommand.MESSAGE_INVALID_COMMAND_FORMAT, pe);
+        Index index = ParserUtil.parseDisplayedIndex(arguments[0]);
+        if (arguments.length == 1) {
+            throw new ParseException(ClientRole.MESSAGE_CONSTRAINTS);
         }
 
         if (!ClientRole.isValidRole(arguments[1])) {

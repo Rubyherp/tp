@@ -23,14 +23,15 @@ public class ViewCommandParserTest {
 
     @Test
     public void parse_missingOrMalformedIndex_throwsFormatError() {
-        for (String input : List.of("", "   ", "abc", "1 2", "1 extra", "1.5", "+1", "1 n/Alice")) {
+        for (String input : List.of("", "   ", "1 2", "1 extra", "1 n/Alice")) {
             assertParseFailure(parser, input, "Invalid command format. Use: view INDEX.");
         }
     }
 
     @Test
-    public void parse_nonPositiveOrOverflowIndex_throwsInvalidIndexError() {
-        for (String input : List.of("0", "-1", "-0", "2147483648", "999999999999999999999")) {
+    public void parse_invalidIndex_throwsInvalidIndexError() {
+        for (String input : List.of("0", "-1", "-0", "abc", "1.5", "+1",
+                "2147483648", "999999999999999999999")) {
             assertParseFailure(parser, input, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
     }

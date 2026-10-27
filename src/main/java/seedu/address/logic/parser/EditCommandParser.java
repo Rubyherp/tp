@@ -18,7 +18,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -46,16 +45,10 @@ public class EditCommandParser implements Parser<EditCommand> {
                         PREFIX_BUDGET, PREFIX_ASKING_PRICE, PREFIX_AREA, PREFIX_HOUSING_TYPE, PREFIX_TAG);
 
         String indexArgument = argMultimap.getPreamble().trim();
-        Index index;
-
-        try {
-            index = ParserUtil.parseIndex(indexArgument);
-        } catch (ParseException pe) {
-            String message = indexArgument.matches("-?[0-9]+")
-                    ? Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX
-                    : String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE);
-            throw new ParseException(message, pe);
+        if (indexArgument.isEmpty() || indexArgument.split("\\s+").length != 1) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
         }
+        Index index = ParserUtil.parseDisplayedIndex(indexArgument);
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS,
                 PREFIX_BUDGET, PREFIX_ASKING_PRICE);

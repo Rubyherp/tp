@@ -2,8 +2,6 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 
-import seedu.address.commons.core.index.Index;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -20,16 +18,12 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
     public DeleteCommand parse(String args) throws ParseException {
         requireNonNull(args);
         String trimmedArgs = args.trim();
+        String[] arguments = trimmedArgs.isEmpty() ? new String[0] : trimmedArgs.split("\\s+");
 
-        if (!trimmedArgs.matches("-?[0-9]+")) {
+        if (arguments.length != 1) {
             throw new ParseException(DeleteCommand.MESSAGE_INVALID_FORMAT);
         }
 
-        try {
-            Index index = ParserUtil.parseIndex(trimmedArgs);
-            return new DeleteCommand(index);
-        } catch (ParseException pe) {
-            throw new ParseException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, pe);
-        }
+        return new DeleteCommand(ParserUtil.parseDisplayedIndex(arguments[0]));
     }
 }

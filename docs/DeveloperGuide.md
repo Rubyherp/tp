@@ -192,9 +192,9 @@ Invalid inputs do not change the client's role:
 
 | Situation | Expected result |
 |-----------|-----------------|
-| The command format or index syntax is invalid | `Error: Invalid command format. Use: role INDEX ROLE.` |
+| The index is malformed, non-positive, overflowing, or outside the displayed list | `Error: The client index provided is invalid.` |
+| The index is missing, or the command has extra arguments | `Error: Invalid command format. Use: role INDEX ROLE.` |
 | The role is missing or is not `buyer`, `seller`, or `both` | `Error: Invalid Role: Role must be 'buyer', 'seller', or 'both'.` |
-| The positive index is outside the currently displayed list | `Error: The client index provided is invalid.` |
 
 The following sequence diagram shows how the `role 1 buyer` command is processed successfully:
 
@@ -243,11 +243,11 @@ Neither selection nor `ViewCommand` changes client data or the active predicate.
 
 **Command path.** `CommandBox` passes input to `MainWindow#executeCommand`,
 which calls `LogicManager#execute`. `AddressBookParser` delegates `view` arguments
-to `ViewCommandParser`. The parser accepts one integer token and uses
-`ParserUtil#parseIndex` to validate a positive, supported index. Missing,
-non-numeric or extra arguments raise `ParseException` with
-`Invalid command format. Use: view INDEX.` Zero, negative and overflowing integer
-values instead use `Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX`.
+to `ViewCommandParser`. The parser accepts one index token and uses
+`ParserUtil#parseDisplayedIndex` to validate a positive, supported index. A missing
+index or extra arguments raise `ParseException` with
+`Invalid command format. Use: view INDEX.` A malformed, zero, negative or overflowing
+index instead uses `Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX`.
 
 `ViewCommand#execute` reads `Model#getFilteredPersonList`, checks the upper bound
 and obtains the client's name for `Showing <name>.`. An out-of-range index raises
@@ -827,7 +827,7 @@ testers are expected to do more *exploratory* testing.
    1. Prerequisites: Run `list` and note the current role of client 1.
 
    1. Test case: `role 0 buyer`<br>
-      Expected: No role is changed. The result box shows `Error: Invalid command format. Use: role INDEX ROLE.`
+      Expected: No role is changed. The result box shows `Error: The client index provided is invalid.`
 
    1. Test case: `role 1`<br>
       Expected: No role is changed. The result box shows
@@ -1106,6 +1106,9 @@ testers are expected to do more *exploratory* testing.
       Expected: The result box shows `Error: Invalid command format. Use: view INDEX.`.
 
    1. Test case: `view 0`<br>
+      Expected: The result box shows `Error: The client index provided is invalid.`.
+
+   1. Test case: `view abc`<br>
       Expected: The result box shows `Error: The client index provided is invalid.`.
 
 1. Empty panel state

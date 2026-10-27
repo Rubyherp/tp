@@ -6,6 +6,7 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.RoleCommand;
 import seedu.address.model.person.ClientRole;
 
@@ -25,13 +26,21 @@ public class RoleCommandParserTest {
 
     @Test
     public void parse_invalidFormat_failure() {
-        String[] invalidInputs = {
-            "", "buyer", "0 buyer", "-1 buyer", "1.5 buyer", "abc buyer",
-            "2147483648 buyer", "1 buyer extra"
-        };
+        String[] invalidInputs = {"", "1 buyer extra"};
 
         for (String input : invalidInputs) {
             assertParseFailure(parser, input, RoleCommand.MESSAGE_INVALID_COMMAND_FORMAT);
+        }
+    }
+
+    @Test
+    public void parse_invalidIndex_failure() {
+        String[] invalidInputs = {
+            "buyer", "0 buyer", "-1 buyer", "1.5 buyer", "abc buyer", "2147483648 buyer"
+        };
+
+        for (String input : invalidInputs) {
+            assertParseFailure(parser, input, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
     }
 

@@ -3,7 +3,6 @@ package seedu.address.logic.parser;
 import static java.util.Objects.requireNonNull;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.NoteCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Note;
@@ -23,12 +22,7 @@ public class NoteCommandParser implements Parser<NoteCommand> {
         }
 
         String[] arguments = trimmedArgs.split("\\s+", 2);
-        Index index;
-        try {
-            index = ParserUtil.parseIndex(arguments[0]);
-        } catch (ParseException pe) {
-            throw new ParseException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, pe);
-        }
+        Index index = ParserUtil.parseDisplayedIndex(arguments[0]);
 
         String rawText = arguments.length == 2 ? arguments[1] : "";
         String decodedText = rawText.replace("\\n", "\n").trim();

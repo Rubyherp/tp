@@ -210,9 +210,10 @@ change moves a different client into the same index. It does not delete data.
 Even if `list` or `find` produces the same results, a successful command clears
 the selection so that you can choose from the current list again.
 
-**Invalid input:** `view`, `view abc` and `view 1 extra` show
-`Error: Invalid command format. Use: view INDEX.` An index of zero, a negative index,
-or an index outside the displayed list shows `Error: The client index provided is invalid.`
+**Invalid input:** `view` and `view 1 extra` show
+`Error: Invalid command format. Use: view INDEX.` A malformed index such as `view abc` or `view 1.5`,
+a zero or negative index, and an index outside the displayed list all show
+`Error: The client index provided is invalid.`
 Outside a pending `clear` confirmation, a rejected `view` shows the error above and leaves
 the existing profile unchanged. If a `clear` confirmation is pending, any `view` input,
 valid or not, cancels the clear instead: you see `Clear cancelled.`, `view` is not run,
